@@ -16,15 +16,36 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Home() {
-  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const [shortenedUrl, setShortenedUrl] = useState("");
   const [longUrl, setLongUrl] = useState("");
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(shortenedUrl);
-  };
-
   const toast = useToast();
+
+  const handleCopyLink = () => {
+    navigator.clipboard
+      .writeText(shortenedUrl)
+      .then(() => {
+        toast({
+          title: "Link copied!",
+          description: "We've copied the link to your clipboard.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Link copied failed!",
+          description:
+            "Link was not copied to your clipboard, please manually copy it.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      });
+  };
 
   const handleSubmit = async () => {
     try {
@@ -32,11 +53,11 @@ export default function Home() {
         .post("/api/generateLink", { longUrl })
         .then(function (response) {
           setShortenedUrl(response.data.shortenedUrl);
-          console.log(response.data.shortenedUrl);
-          setError(false);
+          setSuccess(true);
         });
     } catch (error) {
-      setError(true);
+      setErrorMsg(error.response.data.message);
+      setSuccess(false);
       console.error(error);
     }
   };
@@ -54,7 +75,7 @@ export default function Home() {
         <Heading p="3%">URL Shortener</Heading>
       </Center>
       <Center>
-        <FormControl isRequired w={"70%"} isInvalid={error}>
+        <FormControl isRequired w={"70%"} isInvalid={errorMsg !== ""}>
           <InputGroup>
             <Input
               size="lg"
@@ -77,26 +98,12 @@ export default function Home() {
         </FormControl>
       </Center>
       <Center>
-        {error ? (
-          <Text p="3%">Invalid URL. Please input a correct URL.</Text>
-        ) : (
+        {errorMsg && <Text p="3%">{errorMsg}</Text>}
+        {success === true && (
           <Flex p="3%">
             <Text mt={1.5}>{shortenedUrl}</Text>
             <Spacer></Spacer>
-            <Button
-              colorScheme="whatsapp"
-              ml={5}
-              onClick={() => {
-                handleCopyLink;
-                toast({
-                  title: "Link copied!",
-                  description: "We've copied the link to your clipboard.",
-                  status: "success",
-                  duration: 5000,
-                  isClosable: true,
-                });
-              }}
-            >
+            <Button colorScheme="whatsapp" ml={5} onClick={handleCopyLink}>
               Copy Link
             </Button>
           </Flex>

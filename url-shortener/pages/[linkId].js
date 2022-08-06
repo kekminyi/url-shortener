@@ -4,11 +4,9 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export async function getStaticPaths() {
-  // Get all the homes IDs from the database
   const urls = await prisma.urlDB.findMany({
     select: { linkId: true },
   });
-  console.log(urls);
   return {
     paths: urls.map((url) => ({
       params: { linkId: url.linkId },
@@ -22,7 +20,6 @@ export async function getStaticProps({ params }) {
     where: { linkId: params.linkId },
   });
   if (entry !== null) {
-    console.log("hekki");
     return {
       redirect: {
         destination: entry.longUrl,
