@@ -1,4 +1,5 @@
-import React from "react";
+import { Heading, Center } from "@chakra-ui/react";
+
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -7,7 +8,7 @@ export async function getStaticPaths() {
   const urls = await prisma.urlDB.findMany({
     select: { linkId: true },
   });
-
+  console.log(urls);
   return {
     paths: urls.map((url) => ({
       params: { linkId: url.linkId },
@@ -17,31 +18,32 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  try {
-    const entry = await prisma.urlDB.findUnique({
-      where: { linkId: params.linkId },
-    });
-
-    if (entry.length !== 0) {
-      return {
-        redirect: {
-          destination: entry.longUrl,
-        },
-      };
-    } else {
-      return {
-        redirect: {
-          destination: "/",
-        },
-      };
-    }
-  } catch (error) {
-    console.error(error);
+  const entry = await prisma.urlDB.findUnique({
+    where: { linkId: params.linkId },
+  });
+  if (entry !== null) {
+    console.log("hekki");
+    return {
+      redirect: {
+        destination: entry.longUrl,
+      },
+    };
   }
+
+  return {
+    redirect: {
+      destination: "/error",
+      permanent: false,
+    },
+  };
 }
 
 const Link = () => {
-  return <div>Link</div>;
+  return (
+    <Center mt={"50vh"}>
+      <Heading>Incorrect link provided. Please input another url. </Heading>
+    </Center>
+  );
 };
 
 export default Link;

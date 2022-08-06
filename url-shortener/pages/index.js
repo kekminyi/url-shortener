@@ -38,8 +38,8 @@ export default function Home() {
         <Heading p="3%">URL Shortener</Heading>
       </Center>
       <Center>
-        <FormControl isRequired>
-          <InputGroup width="60rem">
+        <FormControl isRequired w={"70%"}>
+          <InputGroup>
             <Input
               size="lg"
               placeholder="What is the URL that is being shortened today?"
