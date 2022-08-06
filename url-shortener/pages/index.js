@@ -7,7 +7,9 @@ import {
   InputGroup,
   FormControl,
   InputRightElement,
+  useToast,
   Input,
+  Spacer,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import React, { useState } from "react";
@@ -16,23 +18,31 @@ import axios from "axios";
 export default function Home() {
   const [error, setError] = useState(false);
   const [shortenedUrl, setShortenedUrl] = useState("");
+  const [longUrl, setLongUrl] = useState("");
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(shortenedUrl);
+  };
+
+  const toast = useToast();
+
   const handleSubmit = async () => {
-    console.log(url);
     try {
-      await axios.post("/api/generateLink", { url }).then(function (response) {
-        setShortenedUrl(response.data.url);
-        console.log(response);
-        setError(false);
-      });
+      await axios
+        .post("/api/generateLink", { longUrl })
+        .then(function (response) {
+          setShortenedUrl(response.data.shortenedUrl);
+          console.log(response.data.shortenedUrl);
+          setError(false);
+        });
     } catch (error) {
       setError(true);
       console.error(error);
     }
   };
 
-  const [url, setUrl] = useState("");
   const handleChange = (event) => {
-    setUrl(event.target.value);
+    setLongUrl(event.target.value);
   };
 
   return (
@@ -49,7 +59,7 @@ export default function Home() {
             <Input
               size="lg"
               placeholder="What is the URL that is being shortened today?"
-              value={url}
+              value={longUrl}
               onChange={handleChange}
             ></Input>
             <InputRightElement width="6.5rem">
@@ -70,7 +80,26 @@ export default function Home() {
         {error ? (
           <Text p="3%">Invalid URL. Please input a correct URL.</Text>
         ) : (
-          <Text p="3%">{shortenedUrl}</Text>
+          <Flex p="3%">
+            <Text mt={1.5}>{shortenedUrl}</Text>
+            <Spacer></Spacer>
+            <Button
+              colorScheme="whatsapp"
+              ml={5}
+              onClick={() => {
+                handleCopyLink;
+                toast({
+                  title: "Link copied!",
+                  description: "We've copied the link to your clipboard.",
+                  status: "success",
+                  duration: 5000,
+                  isClosable: true,
+                });
+              }}
+            >
+              Copy Link
+            </Button>
+          </Flex>
         )}
       </Center>
     </Flex>

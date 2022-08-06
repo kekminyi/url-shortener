@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const generateLinkId = () => {
+const generateLinkId = async () => {
   const alphanumericList =
     "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let linkId = "";
@@ -11,6 +11,8 @@ const generateLinkId = () => {
       Math.floor(Math.random() * alphanumericList.length),
     );
   }
+  const linkIds = await prisma.urlDB.findMany({ where: linkId });
+  if (linkIds.length > 0) generateLinkId;
   return linkId;
 };
 
@@ -33,22 +35,30 @@ const validateURL = (url) => {
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      const { url } = req.body;
-      if (!validateURL(url)) {
+      const { longUrl } = req.body;
+      if (!validateURL(longUrl)) {
         return res.status(400).json({
           error: "Invalid URL",
         });
       }
+      const result = await prisma.urlDB.findMany({
+        where: { longUrl: longUrl },
+      });
+      if (result.length > 0) {
+        return res.status(201).json({
+          shortenedUrl: `https://localhost:3000/${result[0].linkId}`,
+        });
+      }
+
       const linkId = generateLinkId(6);
-      console.log(linkId);
       const newLink = await prisma.urlDB.create({
         data: {
-          longUrl: url,
+          longUrl: longUrl,
           linkId,
         },
       });
       res.status(201).json({
-        url: `https://localhost:3000/${linkId}`,
+        shortenedUrl: `https://localhost:3000/${linkId}`,
       });
     } catch (e) {
       console.error(e);
