@@ -30,10 +30,18 @@ const validateURL = (url) => {
   return !!pattern.test(url);
 };
 
+const addHttps = (longUrl) => {
+  if (!/^(?:f|ht)tps?\:\/\//.test(longUrl)) {
+    longUrl = "https://" + longUrl;
+  }
+  return longUrl;
+};
+
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      const { longUrl } = req.body;
+      let { longUrl } = req.body;
+      longUrl = addHttps(longUrl);
       if (!validateURL(longUrl)) {
         return res.status(400).json({
           message: "Invalid URL.",
@@ -44,7 +52,7 @@ export default async function handler(req, res) {
       });
       if (result.length > 0) {
         return res.status(201).json({
-          shortenedUrl: `https://localhost:3000/${result[0].linkId}`,
+          shortenedUrl: `http://localhost:3000/${result[0].linkId}`,
         });
       }
 
@@ -61,7 +69,7 @@ export default async function handler(req, res) {
         },
       });
       return res.status(201).json({
-        shortenedUrl: `https://localhost:3000/${linkId}`,
+        shortenedUrl: `http://localhost:3000/${linkId}`,
       });
     } catch (e) {
       console.error(e);

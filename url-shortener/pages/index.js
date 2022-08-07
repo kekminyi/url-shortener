@@ -6,11 +6,13 @@ import {
   Text,
   InputGroup,
   FormControl,
-  InputRightElement,
+  Link,
+  Box,
   useToast,
-  Input,
   Spacer,
+  Textarea,
 } from "@chakra-ui/react";
+
 import Head from "next/head";
 import React, { useState } from "react";
 import axios from "axios";
@@ -54,6 +56,7 @@ export default function Home() {
         .then(function (response) {
           setShortenedUrl(response.data.shortenedUrl);
           setSuccess(true);
+          setErrorMsg("");
         });
     } catch (error) {
       setErrorMsg(error.response.data.message);
@@ -75,33 +78,48 @@ export default function Home() {
         <Heading p="3%">URL Shortener</Heading>
       </Center>
       <Center>
-        <FormControl isRequired w={"70%"} isInvalid={errorMsg !== ""}>
+        <FormControl
+          isRequired
+          w={"70%"}
+          isInvalid={errorMsg !== "" && !success}
+        >
           <InputGroup>
-            <Input
+            <Textarea
               size="lg"
+              fontSize="xl"
               placeholder="What is the URL that is being shortened today?"
               value={longUrl}
               onChange={handleChange}
-            ></Input>
-            <InputRightElement width="6.5rem">
-              <Button
-                h="2rem"
-                size="sm"
-                colorScheme="blue"
-                mt="0.5em"
-                onClick={handleSubmit}
-              >
-                Shorten!
-              </Button>
-            </InputRightElement>
+            ></Textarea>
           </InputGroup>
+          <Button
+            size="md"
+            w="100%"
+            colorScheme="blue"
+            mt="1em"
+            onClick={handleSubmit}
+          >
+            Shorten!
+          </Button>
         </FormControl>
       </Center>
       <Center>
         {errorMsg && <Text p="3%">{errorMsg}</Text>}
         {success === true && (
-          <Flex p="3%">
-            <Text mt={1.5}>{shortenedUrl}</Text>
+          <Flex p="10%">
+            <Box
+              borderWidth="1px"
+              borderRadius="lg"
+              px="4"
+              py="1"
+              display="flex"
+              flexDirection="row"
+              fontSize="xl"
+            >
+              <Link href={shortenedUrl} isExternal>
+                {shortenedUrl}
+              </Link>
+            </Box>
             <Spacer></Spacer>
             <Button colorScheme="whatsapp" ml={5} onClick={handleCopyLink}>
               Copy Link
