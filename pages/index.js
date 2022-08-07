@@ -77,68 +77,77 @@ export default function Home() {
   };
 
   return (
-    <Flex flexDir={"column"}>
+    <Flex flexDir={"column"} bg="blue.800" h="100vh">
       <Head>
         <title>URL Shortener</title>
       </Head>
-      <Center>
-        <Heading p="3%">URL Shortener</Heading>
-      </Center>
-      <Center>
-        <FormControl
-          isRequired
-          w={"70%"}
-          isInvalid={errorMsg !== "" && !success}
-        >
-          <InputGroup>
-            <Textarea
-              size="lg"
-              fontSize="l"
-              placeholder="What is the URL that is being shortened today?"
-              value={longUrl}
-              onChange={handleChange}
-            ></Textarea>
-          </InputGroup>
-          <Button
-            size="md"
-            w="100%"
-            colorScheme="blue"
-            mt="1em"
-            onClick={handleSubmit}
+      <Box
+        bg="white"
+        borderWidth="1px"
+        borderRadius="lg"
+        mx="15%"
+        my="5%"
+        py="10"
+      >
+        <Center>
+          <Heading p="2%">URL Shortener</Heading>
+        </Center>
+        <Center>
+          <FormControl
+            isRequired
+            w={"70%"}
+            isInvalid={errorMsg !== "" && !success}
           >
-            Shorten!
-          </Button>
-        </FormControl>
-      </Center>
-      <Center>
-        {errorMsg && <Text p="3%">{errorMsg}</Text>}
-        {success === true && (
-          <Flex p="10%" flexDir={["column", "column", "row", "row", "row"]}>
-            <Box
-              borderWidth="1px"
-              borderRadius="lg"
-              px="4"
-              py="1"
-              display="flex"
-              flexDirection="row"
-              fontSize="xl"
-            >
-              <Link href={shortenedUrl} isExternal>
-                {shortenedUrl}
-              </Link>
-            </Box>
-            <Spacer></Spacer>
+            <InputGroup>
+              <Textarea
+                size="lg"
+                fontSize="l"
+                placeholder="What is the URL that is being shortened today?"
+                value={longUrl}
+                onChange={handleChange}
+              ></Textarea>
+            </InputGroup>
             <Button
-              colorScheme="whatsapp"
-              ml={[0, 0, 5, 5, 5]}
-              onClick={handleCopyLink}
-              mt={[2, 2, 0, 0, 0]}
+              size="md"
+              w="100%"
+              colorScheme="blue"
+              mt="1em"
+              onClick={handleSubmit}
             >
-              Copy Link
+              Shorten!
             </Button>
-          </Flex>
-        )}
-      </Center>
+          </FormControl>
+        </Center>
+        <Center>
+          {errorMsg && <Text p="3%">{errorMsg}</Text>}
+          {success === true && (
+            <Flex p="5%" flexDir={["column", "column", "row", "row", "row"]}>
+              <Box
+                borderWidth="1px"
+                borderRadius="lg"
+                px="4"
+                py="1"
+                display="flex"
+                flexDirection="row"
+                fontSize="xl"
+              >
+                <Link href={shortenedUrl} isExternal>
+                  {shortenedUrl}
+                </Link>
+              </Box>
+              <Spacer></Spacer>
+              <Button
+                colorScheme="whatsapp"
+                ml={[0, 0, 5, 5, 5]}
+                onClick={handleCopyLink}
+                mt={[2, 2, 0, 0, 0]}
+              >
+                Copy Link
+              </Button>
+            </Flex>
+          )}
+        </Center>
+      </Box>
     </Flex>
   );
 }
