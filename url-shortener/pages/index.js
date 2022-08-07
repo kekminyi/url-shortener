@@ -33,7 +33,7 @@ export default function Home() {
           title: "Link copied!",
           description: "We've copied the link to your clipboard.",
           status: "success",
-          duration: 5000,
+          duration: 6000,
           isClosable: true,
         });
       })
@@ -43,7 +43,7 @@ export default function Home() {
           description:
             "Link was not copied to your clipboard, please manually copy it.",
           status: "error",
-          duration: 5000,
+          duration: 6000,
           isClosable: true,
         });
       });
@@ -57,6 +57,13 @@ export default function Home() {
           setShortenedUrl(response.data.shortenedUrl);
           setSuccess(true);
           setErrorMsg("");
+          toast({
+            title: "Link shortened!",
+            description: "We successfully shortened the link for you!",
+            status: "success",
+            duration: 6000,
+            isClosable: true,
+          });
         });
     } catch (error) {
       setErrorMsg(error.response.data.message);
@@ -86,7 +93,7 @@ export default function Home() {
           <InputGroup>
             <Textarea
               size="lg"
-              fontSize="xl"
+              fontSize="l"
               placeholder="What is the URL that is being shortened today?"
               value={longUrl}
               onChange={handleChange}
@@ -106,7 +113,7 @@ export default function Home() {
       <Center>
         {errorMsg && <Text p="3%">{errorMsg}</Text>}
         {success === true && (
-          <Flex p="10%">
+          <Flex p="10%" flexDir={["column", "column", "row", "row", "row"]}>
             <Box
               borderWidth="1px"
               borderRadius="lg"
@@ -121,7 +128,12 @@ export default function Home() {
               </Link>
             </Box>
             <Spacer></Spacer>
-            <Button colorScheme="whatsapp" ml={5} onClick={handleCopyLink}>
+            <Button
+              colorScheme="whatsapp"
+              ml={[0, 0, 5, 5, 5]}
+              onClick={handleCopyLink}
+              mt={[2, 2, 0, 0, 0]}
+            >
               Copy Link
             </Button>
           </Flex>
