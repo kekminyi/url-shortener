@@ -47,16 +47,11 @@ export default async function handler(req, res) {
       });
       if (result.length > 0) {
         return res.status(201).json({
-          shortenedUrl: `http://localhost:3000/${result[0].linkId}`,
+          shortenedUrl: `${process.env.VERCEL_URL}${result[0].linkId}`,
         });
       }
 
       const linkId = generateLinkId(6);
-      // const linkIds = await prisma.urlDB.findMany({
-      //   where: { linkId: linkId },
-      // });
-      // if (linkIds.length > 0) generateLinkId;
-      // console.log(linkId);
       const newLink = await prisma.urlDB.create({
         data: {
           longUrl: longUrl,
@@ -64,7 +59,7 @@ export default async function handler(req, res) {
         },
       });
       return res.status(201).json({
-        shortenedUrl: `http://localhost:3000/${linkId}`,
+        shortenedUrl: `${process.env.VERCEL_URL}${linkId}`,
       });
     } catch (e) {
       console.error(e);

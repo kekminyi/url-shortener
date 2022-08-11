@@ -41,7 +41,6 @@ export default async function handler(req, res) {
         where: { linkId: linkId },
       });
       if (linkIds.length > 0) {
-        //TODO: throw error if clash with existing shortened link
         return res.status(400).json({
           message: "Custom short link already exists. Please try another one.",
         });
@@ -55,7 +54,7 @@ export default async function handler(req, res) {
           },
         });
         return res.status(201).json({
-          shortenedUrl: `http://localhost:3000/${linkId}`,
+          shortenedUrl: `${process.env.VERCEL_URL}${linkId}`,
         });
       } else {
         return res.status(400).json({
