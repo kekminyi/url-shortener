@@ -22,7 +22,7 @@ export default function StandardShortener() {
   const [shortenedUrl, setShortenedUrl] = useState("");
   const [longUrl, setLongUrl] = useState("");
   const [customShortLink, setCustomShortLink] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
   const handleCopyLink = () => {
@@ -51,6 +51,7 @@ export default function StandardShortener() {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       await axios
         .post("/api/generateCustomLink", { longUrl, customShortLink })
         .then(function (response) {
@@ -70,6 +71,7 @@ export default function StandardShortener() {
       setSuccess(false);
       console.error(error);
     }
+    setIsLoading(false);
   };
 
   const handleLongUrlChange = (event) => {
@@ -107,6 +109,7 @@ export default function StandardShortener() {
             colorScheme="blackAlpha"
             mt="1em"
             onClick={handleSubmit}
+            isLoading={isLoading}
           >
             Shorten!
           </Button>
