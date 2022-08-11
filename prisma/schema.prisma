@@ -14,6 +14,5 @@ model UrlDB {
   id        Int      @id @default(autoincrement())
   longUrl   String
   linkId    String   @unique
-  counter   Int      @default(0)
   createdAt DateTime @default(now())
 }
