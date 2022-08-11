@@ -1,37 +1,31 @@
+import React from "react";
 import { Heading, Center } from "@chakra-ui/react";
-
 import { prisma } from "/lib/prisma";
 
-export async function getStaticPaths() {
-  const urls = await prisma.urlDB.findMany({
-    select: { linkId: true },
-  });
-  return {
-    paths: urls.map((url) => ({
-      params: { linkId: url.linkId },
-    })),
-    fallback: true,
-  };
-}
+export async function getServerSideProps({ params }) {
+  try {
+    const result = await prisma.urlDB.findUnique({
+      where: { linkId: params.linkId },
+    });
 
-export async function getStaticProps({ params }) {
-  const entry = await prisma.urlDB.findUnique({
-    where: { linkId: params.linkId },
-  });
-  if (entry !== null) {
-    return {
-      redirect: {
-        destination: entry.longUrl,
-      },
-    };
+    if (result !== null) {
+      return {
+        redirect: {
+          destination: result.longUrl,
+          permanent: true,
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: "/error",
+          permanent: true,
+        },
+      };
+    }
+  } catch (e) {
+    console.log(e);
   }
-
-  return {
-    redirect: {
-      destination: "/error",
-      permanent: false,
-    },
-  };
 }
 
 const Link = () => {
