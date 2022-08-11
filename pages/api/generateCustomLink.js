@@ -54,7 +54,7 @@ export default async function handler(req, res) {
           },
         });
         return res.status(201).json({
-          shortenedUrl: `${process.env.VERCEL_URL}/${linkId}`,
+          shortenedUrl: `http://${process.env.VERCEL_URL}/${linkId}`,
         });
       } else {
         return res.status(400).json({
