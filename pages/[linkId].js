@@ -1,7 +1,6 @@
 import { Heading, Center } from "@chakra-ui/react";
 
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
+import { prisma } from "/lib/prisma";
 
 export async function getStaticPaths() {
   const urls = await prisma.urlDB.findMany({

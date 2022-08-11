@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "/lib/prisma";
 
 const validateShortLink = (customShortLink) => {
   var pattern = new RegExp("^[a-zA-Z0-9]+$");
