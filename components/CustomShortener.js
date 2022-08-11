@@ -15,6 +15,7 @@ import {
 
 import React, { useState } from "react";
 import axios from "axios";
+import NextLink from "next/link";
 
 export default function StandardShortener() {
   const [success, setSuccess] = useState(false);
@@ -134,14 +135,11 @@ export default function StandardShortener() {
               flexDirection="row"
               bg={"gray.400"}
             >
-              <Link
-                href={shortenedUrl}
-                isExternal
-                fontSize={["xs", "xs", "md", "lg", "lg"]}
-                colorScheme={"white"}
-              >
-                {shortenedUrl}
-              </Link>
+              <NextLink href={shortenedUrl} passHref>
+                <Link isExternal fontSize={["xs", "xs", "md", "lg", "lg"]}>
+                  {shortenedUrl}
+                </Link>
+              </NextLink>
             </Box>
             <Spacer></Spacer>
             <Button
