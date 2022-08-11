@@ -47,7 +47,7 @@ export default async function handler(req, res) {
       });
       if (result.length > 0) {
         return res.status(201).json({
-          shortenedUrl: `${process.env.VERCEL_URL}${result[0].linkId}`,
+          shortenedUrl: `${process.env.VERCEL_URL}/${result[0].linkId}`,
         });
       }
 
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
         },
       });
       return res.status(201).json({
-        shortenedUrl: `${process.env.VERCEL_URL}${linkId}`,
+        shortenedUrl: `${process.env.VERCEL_URL}/${linkId}`,
       });
     } catch (e) {
       console.error(e);
