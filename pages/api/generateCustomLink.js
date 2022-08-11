@@ -2,16 +2,9 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const generateLinkId = () => {
-  const alphanumericList =
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let linkId = "";
-  for (let i = 0; i < 6; i++) {
-    linkId += alphanumericList.charAt(
-      Math.floor(Math.random() * alphanumericList.length),
-    );
-  }
-  return linkId;
+const validateShortLink = (customShortLink) => {
+  var pattern = new RegExp("^[a-zA-Z0-9]+$");
+  return pattern.test(customShortLink);
 };
 
 const validateURL = (url) => {
@@ -37,41 +30,45 @@ const addHttps = (longUrl) => {
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
-      let { longUrl } = req.body;
+      let { longUrl, customShortLink } = req.body;
+      console.log(req.body);
       longUrl = addHttps(longUrl);
       if (!validateURL(longUrl)) {
         return res.status(400).json({
           message: "Invalid URL.",
         });
       }
-      const result = await prisma.urlDB.findMany({
-        where: { longUrl: longUrl },
+      const linkId = customShortLink;
+      const linkIds = await prisma.urlDB.findMany({
+        where: { linkId: linkId },
       });
-      if (result.length > 0) {
-        return res.status(201).json({
-          shortenedUrl: `http://localhost:3000/${result[0].linkId}`,
+      if (linkIds.length > 0) {
+        //TODO: throw error if clash with existing shortened link
+        return res.status(400).json({
+          message: "Custom short link already exists. Please try another one.",
         });
       }
 
-      const linkId = generateLinkId(6);
-      // const linkIds = await prisma.urlDB.findMany({
-      //   where: { linkId: linkId },
-      // });
-      // if (linkIds.length > 0) generateLinkId;
-      // console.log(linkId);
-      const newLink = await prisma.urlDB.create({
-        data: {
-          longUrl: longUrl,
-          linkId,
-        },
-      });
-      return res.status(201).json({
-        shortenedUrl: `http://localhost:3000/${linkId}`,
-      });
+      if (validateShortLink(linkId)) {
+        const newLink = await prisma.urlDB.create({
+          data: {
+            longUrl: longUrl,
+            linkId,
+          },
+        });
+        return res.status(201).json({
+          shortenedUrl: `http://localhost:3000/${linkId}`,
+        });
+      } else {
+        return res.status(400).json({
+          message:
+            "Custom short link should only contain alphanumeric characters.",
+        });
+      }
     } catch (e) {
       console.error(e);
       return res
-        .status(500)
+        .status(400)
         .json({ message: "Something went wrong. Please try again." });
     }
   }
