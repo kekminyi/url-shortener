@@ -10,44 +10,39 @@ import {
 } from "@chakra-ui/react";
 
 import Head from "next/head";
-import React, { useState } from "react";
+import React from "react";
 import StandardShortener from "../components/StandardShortener";
 import CustomShortener from "../components/CustomShortener";
 
 export default function Home() {
-  const standardPanelBGColor = "blue.800";
-  const customPanelBGColor = "teal.700";
+  const standardPanelBGColor = "#2e3749";
+  const customPanelBGColor = "#77808e";
   return (
-    <Flex flexDir={"column"} bg="cyan.800" h="100vh">
+    <Flex flexDir={"column"} bg="#1b202c" h="100vh">
       <Head>
         <title>Link Shortener</title>
       </Head>
       <Center>
-        <Heading p="2%" color={"white"}>
+        <Heading p="2%" color={"gray.200"}>
           Link Shortener
         </Heading>
       </Center>
-      <Center>
-        <Tabs
-          variant="enclosed-colored"
-          w={"40%"}
-          h={"80%"}
-          borderWidth="1px"
-          borderRadius="lg"
-          borderColor={"transparent"}
-        >
+      <Center py={"5%"}>
+        <Tabs variant="enclosed" w={"60%"} borderRadius="lg">
           <TabList borderColor={"transparent"}>
             <Tab
               _selected={{ color: "white", bg: standardPanelBGColor }}
-              borderColor={"transparent"}
               roundedTopLeft={"lg"}
+              color={"white"}
+              bg={"#2e3749"}
             >
               Standard
             </Tab>
             <Tab
               _selected={{ color: "white", bg: customPanelBGColor }}
-              borderColor={"transparent"}
               roundedTopRight={"lg"}
+              color={"white"}
+              bg={"#77808e"}
             >
               Custom
             </Tab>
@@ -55,19 +50,15 @@ export default function Home() {
           <TabPanels>
             <TabPanel
               bg={standardPanelBGColor}
-              borderWidth="1px"
               roundedBottom={"lg"}
               roundedTopRight={"lg"}
-              borderColor={"transparent"}
             >
               <StandardShortener></StandardShortener>
             </TabPanel>
             <TabPanel
               bg={customPanelBGColor}
-              borderWidth="1px"
               roundedBottom={"lg"}
-              roundedTopRight={"lg"}
-              borderColor={"transparent"}
+              roundedTop={"lg"}
             >
               <CustomShortener></CustomShortener>
             </TabPanel>

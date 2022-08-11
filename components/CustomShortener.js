@@ -1,5 +1,4 @@
 import {
-  Heading,
   Button,
   Center,
   Flex,
@@ -88,7 +87,7 @@ export default function StandardShortener() {
           <InputGroup>
             <Textarea
               size="lg"
-              fontSize="l"
+              fontSize={["xs", "sm", "md", "lg", "lg"]}
               placeholder="What is the URL that is being shortened today?"
               value={longUrl}
               bg={"white"}
@@ -97,6 +96,7 @@ export default function StandardShortener() {
           </InputGroup>
           <Input
             placeholder="Custom Short Link"
+            fontSize={["xs", "sm", "md", "lg", "lg"]}
             mt={5}
             bg={"white"}
             onChange={handleCustomShortLinkChange}
@@ -104,7 +104,7 @@ export default function StandardShortener() {
           <Button
             size="md"
             w="100%"
-            colorScheme="blue"
+            colorScheme="blackAlpha"
             mt="1em"
             onClick={handleSubmit}
           >
@@ -113,28 +113,40 @@ export default function StandardShortener() {
         </FormControl>
       </Center>
       <Center>
-        {errorMsg && <Text p="3%">{errorMsg}</Text>}
+        {errorMsg && (
+          <Text p="3%" fontSize={["xs", "xs", "xs", "md", "md"]}>
+            {errorMsg}
+          </Text>
+        )}
         {success === true && (
-          <Flex p="5%" flexDir={["column", "column", "row", "row", "row"]}>
+          <Flex
+            p={["15%", "5%", "3%", "3%", "3%"]}
+            flexDir={["column", "column", "row", "row", "row"]}
+          >
             <Box
-              borderWidth="1px"
               borderRadius="lg"
-              px="4"
-              py="1"
+              px="3"
+              py="2"
               display="flex"
               flexDirection="row"
-              fontSize="xl"
+              bg={"gray.400"}
             >
-              <Link href={shortenedUrl} isExternal>
+              <Link
+                href={shortenedUrl}
+                isExternal
+                fontSize={["xs", "xs", "md", "lg", "lg"]}
+                colorScheme={"white"}
+              >
                 {shortenedUrl}
               </Link>
             </Box>
             <Spacer></Spacer>
             <Button
-              colorScheme="whatsapp"
+              colorScheme="blackAlpha"
               ml={[0, 0, 5, 5, 5]}
               onClick={handleCopyLink}
               mt={[2, 2, 0, 0, 0]}
+              size={["sm", "sm", "sm", "md", "md"]}
             >
               Copy Link
             </Button>
