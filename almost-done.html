@@ -1,0 +1,282 @@
+<!DOCTYPE html><html>
+
+<head> <title></title></head>
+
+<body>
+    <style type="text/css">
+        * {
+            font-family: Arial, Helvetica, sans-serif
+        }
+
+        td {
+            background-color: #ffefd3;
+        }
+
+        tr {
+            border: solid thin;
+            border-color: #dde3e7;
+        }
+
+        table {
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+
+        span {
+            background-color: #ffebc8;
+            color: #a47523;
+            font-weight: 700;
+        }
+        
+        th {
+            color: #777e81;
+            font-weight: 500;
+        }
+
+        div {
+            background-color: #ffebc8; 
+            padding: 10%;
+            border-radius: 10%;
+            justify-content: center;
+            display: flex;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 5px;
+        }
+
+        button {
+            color: white;
+            background-color: #0095ff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 10px 10px 10px;
+        }
+
+    </style>
+
+    <text>Dear <b>FX Watch Admin Users</b>,</text>
+    <br>
+    <br>
+    <text>There are <b>${routeAuditList?size} items</b> in Order Route pending for approval:</text>
+    <br>
+    <br>
+
+    <table>
+        <thead> 
+            <tr> 
+                <th style="border: solid thin; border-color: #dde3e7;">Action</th> <th></th> <th>#</th> <th>Active Status</th> <th>Entity</th> <th>Channel</th> <th>Order Type</th> <th>Group</th> <th>Side</th> <th>Qualifier</th> 
+                <th>Amount</th> <th>Risk Amount</th> <th>CCY Pair</th> <th>Tenor</th> <th>Automonitor</th> <th>Monitor System</th> 
+                <th>Time Based Location</th> <th>From</th> <th>Until</th> <th>To</th> <th>Pass</th> <th>Default Sales</th>
+            </tr> 
+        </thead> 
+        <tbody>
+            <#list routeAuditList as ra>
+            <#assign listOfProperties = ["id", "activeState", "entity", "channelId", "orderType", "group", "side", "qualifier", "amount", "riskAmount", "ccyPair", "tenor", "autoMonitor", "monitorSystem", "timeBasedLocation", "fromTime", "untilTime", "toDesk", "pass", "defaultSales"]>
+            <#assign changes = ra.changes>
+            <tr>
+                <#if ra.action != ""> 
+                    <td rowspan="2" style="background-color: white; border: solid thin; border-color: #dde3e7;"> 
+                        <div><span>${ra.action}</span></div> 
+                    </td> 
+                </#if> 
+                <#if ra?counter % 2 != 0> 
+                    <td style="background-color: white;">Pending Approval</td> 
+                <#else> 
+                    <td style="background-color: white;">Live</td>  
+                </#if> 
+                <#list listOfProperties as property>
+                    <td>${ra[property]}</td>
+                </#list>
+            </tr>
+            <tr>
+                <#list changes as change>
+                    <#if change.fieldName == "id"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.id> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "activeState"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.activeState> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "entity"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.entity> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "channelId"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.channelId> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "orderType"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.orderType> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "group"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.group> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "side"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.side> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "qualifier"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.qualifier> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "amount"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.amount> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "riskAmount"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.riskAmount> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "ccyPair"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.ccyPair> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+                <#list changes as change> 
+                    <#if change.fieldName == "tenor"> 
+                    <#assign x = change.newValue> 
+                    <#break> 
+                    <#else> 
+                        <#assign x = ra.tenor> 
+                    </#if> 
+                </#list> 
+                <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "autoMonitor"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.autoMonitor> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "monitorSystem"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.monitorSystem> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "timeBasedLocation"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.timeBasedLocation> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "fromTime"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.fromTime> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "untilTime"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.untilTime> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "toDesk"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.toDesk> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "pass"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.pass> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+            <#list changes as change> 
+                <#if change.fieldName == "defaultSales"> 
+                <#assign x = change.newValue> 
+                <#break> 
+                <#else> 
+                    <#assign x = ra.defaultSales> 
+                </#if> 
+            </#list> 
+            <td>${x}</td> 
+        </tr> 
+            </#list>
+        </tbody>
+    </table>
+
+</body>
+
+</html>
